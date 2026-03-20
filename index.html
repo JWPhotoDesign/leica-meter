@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="M Meter">
-<title>Leica M · Light Meter · Beta 1.0</title>
+<title>Leica M · Light Meter · Beta 2.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -25,6 +25,7 @@
     --text-faint:#281e10;
     --red:       #8a3820;
     --locked:    #e8a030;
+    --green:     #6a8a40;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -64,7 +65,6 @@
     color: var(--text-dark);
     letter-spacing: 0.55em;
     margin-bottom: 6px;
-    text-transform: uppercase;
   }
 
   .header-title {
@@ -87,8 +87,8 @@
     right: 16px;
     font-family: 'Cormorant SC', serif;
     font-size: 8px;
-    color: var(--gold-dim);
-    border: 1px solid var(--gold-dark);
+    color: var(--green);
+    border: 1px solid #2a3a18;
     border-radius: 3px;
     padding: 3px 7px;
     letter-spacing: 0.2em;
@@ -114,7 +114,7 @@
     margin-bottom: 9px;
   }
 
-  /* ── Camera Variant ── */
+  /* ── Variant selector ── */
   .variant-row {
     display: flex;
     gap: 8px;
@@ -142,8 +142,7 @@
   }
 
   .info-btn {
-    width: 28px;
-    height: 28px;
+    width: 28px; height: 28px;
     background: var(--bg2);
     border: 1px solid var(--border);
     border-radius: 50%;
@@ -158,9 +157,7 @@
     font-family: Georgia, serif;
   }
 
-  .info-btn:hover { border-color: var(--gold-dim); color: var(--gold-dim); }
-
-  /* ── Info Modal ── */
+  /* ── Modal ── */
   .modal-overlay {
     display: none;
     position: fixed;
@@ -182,7 +179,6 @@
     padding: 28px 22px;
     max-width: 360px;
     width: 100%;
-    position: relative;
   }
 
   .modal-title {
@@ -222,7 +218,6 @@
     padding: 6px 6px;
     color: var(--text-dim);
     border-bottom: 1px solid var(--border);
-    vertical-align: top;
   }
 
   .modal-table td:first-child { color: var(--gold-dim); }
@@ -259,23 +254,13 @@
   .viewfinder-wrap.locked { border-color: var(--locked); }
 
   #video {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     object-fit: cover;
     display: none;
   }
 
-  .viewfinder-idle {
-    text-align: center;
-    padding: 20px;
-  }
-
-  .viewfinder-idle-icon {
-    font-size: 28px;
-    opacity: 0.15;
-    margin-bottom: 10px;
-    letter-spacing: 4px;
-  }
+  .viewfinder-idle { text-align: center; padding: 20px; }
+  .viewfinder-idle-icon { font-size: 28px; opacity: 0.15; margin-bottom: 10px; letter-spacing: 4px; }
 
   .viewfinder-idle-text {
     font-family: 'Cormorant SC', serif;
@@ -293,42 +278,29 @@
     max-width: 200px;
   }
 
-  /* Viewfinder overlays */
   .vf-overlay {
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
 
-  /* Corner marks */
-  .corner {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    border-color: rgba(200,169,110,0.5);
-    border-style: solid;
-  }
-
-  .corner.tl { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
-  .corner.tr { top: 10px; right: 10px; border-width: 1px 1px 0 0; }
-  .corner.bl { bottom: 10px; left: 10px; border-width: 0 0 1px 1px; }
+  .corner { position: absolute; width: 14px; height: 14px; border-color: rgba(200,169,110,0.5); border-style: solid; }
+  .corner.tl { top: 10px; left: 10px;   border-width: 1px 0 0 1px; }
+  .corner.tr { top: 10px; right: 10px;  border-width: 1px 1px 0 0; }
+  .corner.bl { bottom: 10px; left: 10px;  border-width: 0 0 1px 1px; }
   .corner.br { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
 
-  /* Spot meter circle — drawn on canvas overlay */
   #spotCanvas {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     cursor: crosshair;
     display: none;
   }
 
-  /* EV live badge */
   .ev-badge {
     position: absolute;
-    bottom: 8px;
-    right: 8px;
+    bottom: 8px; right: 8px;
     background: rgba(5,4,3,0.82);
     border: 1px solid rgba(200,169,110,0.3);
     border-radius: 4px;
@@ -339,11 +311,9 @@
     backdrop-filter: blur(3px);
   }
 
-  /* Metering mode badge */
   .mode-badge {
     position: absolute;
-    top: 8px;
-    left: 8px;
+    top: 8px; left: 8px;
     background: rgba(5,4,3,0.82);
     border: 1px solid rgba(200,169,110,0.25);
     border-radius: 4px;
@@ -355,7 +325,6 @@
     backdrop-filter: blur(3px);
   }
 
-  /* Locked overlay */
   .locked-overlay {
     position: absolute;
     inset: 0;
@@ -376,18 +345,10 @@
     letter-spacing: 0.4em;
   }
 
-  .locked-ev {
-    font-size: 34px;
-    font-weight: 300;
-    color: var(--locked);
-  }
+  .locked-ev { font-size: 34px; font-weight: 300; color: var(--locked); }
 
   /* ── Controls ── */
-  .controls {
-    display: flex;
-    gap: 7px;
-    margin-top: 7px;
-  }
+  .controls { display: flex; gap: 7px; margin-top: 7px; }
 
   .ctrl-btn {
     flex: 1;
@@ -403,17 +364,14 @@
 
   .ctrl-btn.primary   { background: var(--gold-dark); border-color: var(--gold); color: var(--gold); }
   .ctrl-btn.secondary { background: var(--bg2); border-color: var(--border2); color: var(--text-dark); }
-  .ctrl-btn.toggle    { background: var(--bg2); border-color: var(--border2); color: var(--text-dim); }
-  .ctrl-btn.toggle.on { background: #1a2010; border-color: #6a8a40; color: #8ab060; }
 
-  /* ── Meter Toggle (Average / Spot) ── */
+  /* ── Meter toggle ── */
   .meter-toggle {
     display: flex;
-    gap: 0;
-    margin-top: 8px;
     border: 1px solid var(--border);
     border-radius: 6px;
     overflow: hidden;
+    margin-top: 8px;
   }
 
   .meter-toggle-btn {
@@ -421,19 +379,19 @@
     padding: 9px 0;
     background: var(--bg2);
     border: none;
+    border-right: 1px solid var(--border);
     color: var(--text-dark);
     font-family: 'Cormorant SC', serif;
     font-size: 10px;
     letter-spacing: 0.2em;
     cursor: pointer;
     transition: all 0.18s;
-    border-right: 1px solid var(--border);
   }
 
   .meter-toggle-btn:last-child { border-right: none; }
   .meter-toggle-btn.active { background: var(--gold-dark); color: var(--gold); }
 
-  /* ── Needle Meter ── */
+  /* ── Needle ── */
   .needle-wrap {
     display: flex;
     flex-direction: column;
@@ -451,25 +409,69 @@
     margin-top: 2px;
   }
 
-  /* ── Manual EV ── */
-  .ev-slider-row {
+  #needle-group { transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+
+  /* ── Sliders ── */
+  .slider-row {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-top: 8px;
   }
 
-  .ev-slider-row span { font-size: 9px; color: var(--text-faint); min-width: 16px; }
-  .ev-slider-row span.val { font-size: 15px; color: var(--gold); min-width: 30px; text-align: right; }
+  .slider-row .lbl { font-size: 9px; color: var(--text-faint); min-width: 16px; }
+  .slider-row .val { font-size: 15px; color: var(--gold); min-width: 38px; text-align: right; font-variant-numeric: tabular-nums; }
+  .slider-row .val.small { font-size: 12px; color: var(--text-dim); }
 
   input[type=range] {
     flex: 1;
     accent-color: var(--gold);
     cursor: pointer;
-    height: 2px;
   }
 
-  /* ── ISO ── */
+  /* ── Calibration box ── */
+  .cal-box {
+    background: #0e0c08;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 12px 14px;
+    margin-top: 8px;
+  }
+
+  .cal-box-title {
+    font-family: 'Cormorant SC', serif;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+  }
+
+  .cal-note {
+    font-size: 10px;
+    color: var(--text-dark);
+    line-height: 1.6;
+    margin-top: 8px;
+  }
+
+  .cal-note strong { color: var(--text-dim); font-weight: 400; }
+
+  .reset-btn {
+    margin-top: 8px;
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--text-dark);
+    font-family: 'Cormorant SC', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .reset-btn:hover { border-color: var(--gold-dim); color: var(--gold-dim); }
+
+  /* ── Chips ── */
   .chip-row { display: flex; gap: 6px; margin-top: 8px; }
 
   .chip {
@@ -488,13 +490,7 @@
 
   .chip.active { background: var(--gold-dark); border-color: var(--gold); color: var(--gold); }
 
-  /* ── Aperture ── */
-  .aperture-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 8px;
-  }
+  .aperture-grid { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
 
   .aperture-chip {
     padding: 8px 7px;
@@ -512,7 +508,7 @@
 
   .aperture-chip.active { background: var(--gold-dark); border-color: var(--gold); color: var(--gold); }
 
-  /* ── Result card ── */
+  /* ── Result ── */
   .result-card {
     margin-top: 18px;
     background: linear-gradient(150deg, #181410 0%, #0e0c09 100%);
@@ -554,7 +550,6 @@
   .result-meta span { color: var(--text-dark); }
   .result-meta .dot { color: var(--border); }
 
-  /* corner marks on result card */
   .cm { position: absolute; width: 9px; height: 9px; border-color: var(--border2); border-style: solid; }
   .cm.tl { top: 7px; left: 7px;   border-width: 1px 0 0 1px; }
   .cm.tr { top: 7px; right: 7px;  border-width: 1px 1px 0 0; }
@@ -562,12 +557,7 @@
   .cm.br { bottom: 7px; right: 7px; border-width: 0 1px 1px 0; }
 
   /* ── Shutter scale ── */
-  .shutter-scale {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 8px;
-  }
+  .shutter-scale { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
 
   .shutter-chip {
     padding: 7px 9px;
@@ -583,8 +573,8 @@
     position: relative;
   }
 
-  .shutter-chip.ideal   { background: var(--gold-dark); border-color: var(--gold); color: var(--gold); }
-  .shutter-chip.close   { background: #130f08; border-color: #3a2e18; color: #5a4828; }
+  .shutter-chip.ideal { background: var(--gold-dark); border-color: var(--gold); color: var(--gold); }
+  .shutter-chip.close { background: #130f08; border-color: #3a2e18; color: #5a4828; }
 
   .shutter-dot {
     position: absolute;
@@ -596,8 +586,7 @@
 
   .flash-mark {
     position: absolute;
-    bottom: -3px;
-    left: 50%;
+    bottom: -3px; left: 50%;
     transform: translateX(-50%);
     font-size: 7px;
     color: #5a3a18;
@@ -621,7 +610,6 @@
     margin-right: 4px;
   }
 
-  /* ── Footer ── */
   .footer {
     text-align: center;
     font-family: 'Cormorant SC', serif;
@@ -629,43 +617,28 @@
     color: var(--text-faint);
     margin-top: 28px;
     letter-spacing: 0.25em;
+    line-height: 2;
   }
-
-  /* ── Needle animation ── */
-  #needle-group {
-    transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
 </style>
 </head>
 <body>
 
-<!-- ── Info Modal ── -->
+<!-- ── Modal ── -->
 <div class="modal-overlay" id="infoModal">
   <div class="modal">
     <div class="modal-title">Leica M3 · Shutter Variants</div>
     <div class="modal-body">
-      <p>The M3 was produced from 1954–1966 and had <strong>two different shutter speed sequences</strong> during its run.</p>
+      <p>The M3 was produced 1954–1966 with <strong>two shutter speed sequences</strong>.</p>
       <table class="modal-table">
-        <thead>
-          <tr><th>Variant</th><th>Key Speeds</th><th>Serial #</th></tr>
-        </thead>
+        <thead><tr><th>Variant</th><th>Key Speeds</th><th>Serial #</th></tr></thead>
         <tbody>
-          <tr>
-            <td>Early</td>
-            <td>1/25 · 1/50 · 1/100</td>
-            <td>Below 854001</td>
-          </tr>
-          <tr>
-            <td>Late ★</td>
-            <td>1/30 · 1/60 · 1/125</td>
-            <td>854001 and above</td>
-          </tr>
+          <tr><td>Early</td><td>1/25 · 1/50 · 1/100</td><td>Below 854001</td></tr>
+          <tr><td>Late ★</td><td>1/30 · 1/60 · 1/125</td><td>854001 and above</td></tr>
         </tbody>
       </table>
-      <p><strong>How to check:</strong> Look at your shutter dial. If you see <strong>1/25</strong> and <strong>1/50</strong>, select Early. If you see <strong>1/30</strong> and <strong>1/60</strong>, select Late.</p>
+      <p><strong>How to check:</strong> Look at your shutter dial. If you see 1/25 and 1/50, select Early. If you see 1/30 and 1/60, select Late.</p>
       <br>
-      <p style="font-size:12px; color: var(--text-dark);">The changeover happened at serial #854001 in 1957. Some 1957 bodies have modern speeds — always trust your dial over the year.</p>
+      <p style="font-size:12px;color:var(--text-dark)">Changeover at serial #854001 in 1957. Always trust your dial over the production year.</p>
     </div>
     <button class="modal-close" onclick="closeModal()">Close</button>
   </div>
@@ -673,126 +646,129 @@
 
 <!-- ── Header ── -->
 <div class="header">
-  <div class="beta-badge">Beta 1.0</div>
+  <div class="beta-badge">Beta 2.0</div>
   <div class="header-eyebrow">Leica M System · Light Meter</div>
-  <div class="header-title" id="headerCamera">Leica M3</div>
+  <div class="header-title">Leica M3</div>
   <div class="header-lens">Voigtländer 50mm f/2 APO-Lanthar</div>
 </div>
 
 <div class="content">
 
-  <!-- ── Camera Variant ── -->
+  <!-- Variant -->
   <div class="section">
     <div class="section-label">Camera Variant</div>
     <div class="variant-row">
       <button class="variant-btn" id="btnEarly" onclick="setVariant('early')">Early · Pre-1957</button>
-      <button class="variant-btn active" id="btnLate" onclick="setVariant('late')">Late · 1957+</button>
+      <button class="variant-btn active" id="btnLate"  onclick="setVariant('late')">Late · 1957+</button>
       <button class="info-btn" onclick="openModal()">ⓘ</button>
     </div>
   </div>
 
-  <!-- ── Viewfinder ── -->
+  <!-- Viewfinder -->
   <div class="section">
     <div class="section-label">Scene · <span id="meteringModeLabel">Average</span></div>
     <div class="viewfinder-wrap" id="viewfinder">
       <video id="video" playsinline muted></video>
       <canvas id="analyzeCanvas" style="display:none"></canvas>
 
-      <!-- Idle state -->
       <div class="viewfinder-idle" id="idleState">
         <div class="viewfinder-idle-icon">⬡</div>
         <div class="viewfinder-idle-text">Tap Live Meter to begin<br>Open in Safari for camera access</div>
         <div class="viewfinder-error" id="cameraError"></div>
       </div>
 
-      <!-- Live overlay -->
       <div class="vf-overlay" id="liveOverlay" style="display:none">
-        <div class="corner tl"></div>
-        <div class="corner tr"></div>
-        <div class="corner bl"></div>
-        <div class="corner br"></div>
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
         <div class="mode-badge" id="modeBadge">AVG</div>
         <div class="ev-badge" id="evBadge">EV —</div>
       </div>
 
-      <!-- Spot canvas (tap to place) -->
       <canvas id="spotCanvas"></canvas>
 
-      <!-- Locked overlay -->
       <div class="locked-overlay" id="lockedOverlay">
         <div class="locked-label">Reading Locked</div>
         <div class="locked-ev" id="lockedEvDisplay">EV —</div>
       </div>
     </div>
 
-    <!-- Metering mode toggle -->
     <div class="meter-toggle" id="meterToggle" style="display:none">
-      <button class="meter-toggle-btn active" id="toggleAvg" onclick="setMeterMode('avg')">◎ &nbsp;Average</button>
-      <button class="meter-toggle-btn" id="toggleSpot" onclick="setMeterMode('spot')">⊙ &nbsp;Spot</button>
+      <button class="meter-toggle-btn active" id="toggleAvg"  onclick="setMeterMode('avg')">◎ &nbsp;Average</button>
+      <button class="meter-toggle-btn"        id="toggleSpot" onclick="setMeterMode('spot')">⊙ &nbsp;Spot</button>
     </div>
 
-    <!-- Controls -->
     <div class="controls" id="controls">
-      <button class="ctrl-btn primary" id="btnLive" onclick="startCamera()">◉ &nbsp;Live Meter</button>
+      <button class="ctrl-btn primary" onclick="startCamera()">◉ &nbsp;Live Meter</button>
     </div>
   </div>
 
-  <!-- ── Needle ── -->
+  <!-- Needle -->
   <div class="needle-wrap">
     <svg id="needleSVG" viewBox="0 0 220 120">
-      <!-- Zone bands -->
       <path d="M 20 108 A 90 90 0 0 1 65 32"  fill="none" stroke="#3a1808" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
       <path d="M 65 32 A 90 90 0 0 1 155 32"  fill="none" stroke="#1e2e10" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
       <path d="M 155 32 A 90 90 0 0 1 200 108" fill="none" stroke="#3a2008" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
-      <!-- Outer arc -->
       <path d="M 20 108 A 90 90 0 0 1 200 108" fill="none" stroke="#221c12" stroke-width="2"/>
       <path d="M 22 108 A 88 88 0 0 1 198 108" fill="none" stroke="#2e2518" stroke-width="0.5"/>
-      <!-- Tick marks (generated via JS) -->
       <g id="ticks"></g>
-      <!-- EV label -->
       <text x="110" y="99" text-anchor="middle" font-size="7.5" fill="#3a3020" font-family="'Cormorant SC', serif" letter-spacing="2">EV</text>
-      <!-- Needle -->
-      <g id="needle-group" style="transform-origin: 110px 108px;">
+      <g id="needle-group" style="transform-origin:110px 108px;">
         <line x1="110" y1="108" x2="110" y2="24" stroke="rgba(0,0,0,0.35)" stroke-width="3" stroke-linecap="round"/>
         <line id="needleLine" x1="110" y1="108" x2="110" y2="24" stroke="#c8a96e" stroke-width="1.5" stroke-linecap="round"/>
         <polygon id="needleTip" points="110,22 107,32 113,32" fill="#c8a96e"/>
-        <!-- Live pulse -->
         <circle id="needlePulse" cx="110" cy="108" r="8" fill="none" stroke="#c8a96e" stroke-width="0.5" opacity="0">
           <animate attributeName="r" values="8;15;8" dur="2s" repeatCount="indefinite"/>
           <animate attributeName="opacity" values="0.35;0;0.35" dur="2s" repeatCount="indefinite"/>
         </circle>
       </g>
-      <!-- Pivot -->
       <circle cx="110" cy="108" r="5" fill="#0a0806" stroke="#c8a96e" stroke-width="1"/>
       <circle cx="110" cy="108" r="2" fill="#c8a96e"/>
     </svg>
     <div class="needle-label" id="needleLabel">Manual · EV 13.0</div>
   </div>
 
-  <!-- ── Manual EV ── -->
+  <!-- Manual EV -->
   <div class="section" id="manualEvSection">
     <div class="section-label">Manual EV</div>
-    <div class="ev-slider-row">
-      <span>5</span>
+    <div class="slider-row">
+      <span class="lbl">5</span>
       <input type="range" id="evSlider" min="5" max="18" step="0.5" value="13" oninput="setManualEv(this.value)">
-      <span>18</span>
+      <span class="lbl">18</span>
       <span class="val" id="evSliderVal">13</span>
     </div>
   </div>
 
-  <!-- ── ISO ── -->
+  <!-- ── Calibration ── -->
+  <div class="section">
+    <div class="section-label">Calibration Offset</div>
+    <div class="cal-box">
+      <div class="cal-box-title">EV Correction · Tuned Against Leica SL2-S</div>
+      <div class="slider-row">
+        <span class="lbl">−5</span>
+        <input type="range" id="calSlider" min="-5" max="0" step="0.5" value="-3.5" oninput="setCalibration(this.value)">
+        <span class="lbl">0</span>
+        <span class="val small" id="calVal">−3.5 EV</span>
+      </div>
+      <div class="cal-note">
+        Beta 1.0 test showed our app reading <strong>~3.5 EV brighter</strong> than the SL2-S at f/2, ISO 400. This offset corrects for the iPhone camera's auto-brightness. Adjust until our reading matches your reference meter.
+      </div>
+      <button class="reset-btn" onclick="resetCalibration()">Reset to −3.5 EV</button>
+    </div>
+  </div>
+
+  <!-- ISO -->
   <div class="section">
     <div class="section-label">Film ISO</div>
     <div class="chip-row" id="isoRow"></div>
   </div>
 
-  <!-- ── Aperture ── -->
+  <!-- Aperture -->
   <div class="section">
     <div class="section-label">Aperture · Half Stops · f/2 – f/16</div>
     <div class="aperture-grid" id="apertureGrid"></div>
   </div>
 
-  <!-- ── Result ── -->
+  <!-- Result -->
   <div class="result-card">
     <div class="cm tl"></div><div class="cm tr"></div>
     <div class="cm bl"></div><div class="cm br"></div>
@@ -807,56 +783,48 @@
     </div>
   </div>
 
-  <!-- ── Shutter Scale ── -->
+  <!-- Shutter scale -->
   <div class="section">
     <div class="section-label">M3 Shutter Dial</div>
     <div class="shutter-scale" id="shutterScale"></div>
     <div class="scale-legend">
       <span><span class="legend-dot"></span>Ideal</span>
-      <span style="color: #3a3020">Faded = adjacent stops</span>
-      <span style="color: #3a2a10">⚡ Flash sync</span>
+      <span style="color:#3a3020">Faded = adjacent stops</span>
+      <span style="color:#3a2a10">⚡ Flash sync</span>
     </div>
   </div>
 
   <div class="footer">
-    Leica M System · Beta 1.0 · For film use · Serial #854001+ = Late variant
+    Leica M System · Beta 2.0<br>
+    Calibrated · Serial #854001+ = Late Variant<br>
+    jwphotodesign.github.io/leica-meter
   </div>
 
-</div><!-- /content -->
+</div>
 
 <script>
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const CAMERAS = {
-  early: {
-    label: 'Early · Pre-1957',
-    note: 'International speed series',
-    speeds: [1, 2, 5, 10, 25, 50, 100, 250, 500, 1000],
-    flashSync: 50,
-  },
-  late: {
-    label: 'Late · 1957+',
-    note: 'Modern speed series',
-    speeds: [1, 2, 4, 8, 15, 30, 60, 125, 250, 500, 1000],
-    flashSync: 50,
-  }
+  early: { speeds: [1,2,5,10,25,50,100,250,500,1000], flashSync: 50 },
+  late:  { speeds: [1,2,4,8,15,30,60,125,250,500,1000], flashSync: 50 },
 };
 
-// Voigtländer 50mm f/2 APO-Lanthar VM — true half-stop clicked ring
-const FSTOPS = [2.0, 2.4, 2.8, 3.4, 4.0, 4.8, 5.6, 6.7, 8.0, 9.5, 11, 13, 16];
-const ISO_VALUES = [25, 50, 100, 200, 400];
+const FSTOPS     = [2.0,2.4,2.8,3.4,4.0,4.8,5.6,6.7,8.0,9.5,11,13,16];
+const ISO_VALUES = [25,50,100,200,400];
 
 // ─── State ────────────────────────────────────────────────────────────────────
 let state = {
-  variant: 'late',
-  fStop: 4.0,
-  iso: 100,
-  manualEv: 13,
-  liveEv: null,
-  lockedEv: null,
-  mode: 'manual',       // manual | live | locked
-  meterMode: 'avg',     // avg | spot
-  spotX: 0.5,           // normalized 0-1
-  spotY: 0.5,
+  variant:    'late',
+  fStop:      4.0,
+  iso:        100,
+  manualEv:   13,
+  liveEv:     null,
+  lockedEv:   null,
+  mode:       'manual',   // manual | live | locked
+  meterMode:  'avg',      // avg | spot
+  spotX:      0.5,
+  spotY:      0.5,
+  calOffset:  -3.5,       // EV correction — calibrated against Leica SL2-S Beta 1.0 test
 };
 
 // ─── Exposure Math ────────────────────────────────────────────────────────────
@@ -873,14 +841,14 @@ function closestSpeed(fStop, ev100, iso, speeds) {
 }
 
 function stopsDiff(fStop, shutter, ev100, iso) {
-  const d = idealDenom(fStop, ev100, iso);
-  return Math.abs(Math.log2(shutter / Math.max(d, 0.01)));
+  return Math.abs(Math.log2(shutter / Math.max(idealDenom(fStop, ev100, iso), 0.01)));
 }
 
-// Luminance → EV100 (Rec.709, calibration K=12.5)
+// Luminance → EV100 with calibration offset applied
 function lumToEV(avg) {
   if (avg <= 0) return 8;
-  return Math.log2((avg / 255) * 12.5 * 16);
+  const raw = Math.log2((avg / 255) * 12.5 * 16);
+  return raw + state.calOffset;
 }
 
 function activeEv() {
@@ -889,13 +857,13 @@ function activeEv() {
   return state.manualEv;
 }
 
-// ─── Format helpers ───────────────────────────────────────────────────────────
+// ─── Formatting ───────────────────────────────────────────────────────────────
 function fmtShutter(s) { return s === 1 ? '1s' : `1/${s}`; }
 function fmtFStop(f) {
   if (f >= 10) return `f/${Math.round(f)}`;
   return Number.isInteger(f) ? `f/${f}` : `f/${f.toFixed(1)}`;
 }
-function fmtEv(v) { return `EV ${(Math.round(v * 10) / 10).toFixed(1)}`; }
+function fmtEv(v) { return `EV ${(Math.round(v*10)/10).toFixed(1)}`; }
 
 // ─── Needle ───────────────────────────────────────────────────────────────────
 function buildTicks() {
@@ -906,22 +874,22 @@ function buildTicks() {
     const cx = 110, cy = 108, r1 = 88;
     const isMajor = ev % 2 === 0;
     const r2 = isMajor ? 74 : 81;
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', cx + r1 * Math.cos(rad));
-    line.setAttribute('y1', cy + r1 * Math.sin(rad));
-    line.setAttribute('x2', cx + r2 * Math.cos(rad));
-    line.setAttribute('y2', cy + r2 * Math.sin(rad));
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', cx + r1*Math.cos(rad));
+    line.setAttribute('y1', cy + r1*Math.sin(rad));
+    line.setAttribute('x2', cx + r2*Math.cos(rad));
+    line.setAttribute('y2', cy + r2*Math.sin(rad));
     line.setAttribute('stroke', isMajor ? '#6a5535' : '#2e2518');
     line.setAttribute('stroke-width', isMajor ? '1.5' : '0.8');
     g.appendChild(line);
     if (isMajor) {
-      const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      txt.setAttribute('x', cx + 62 * Math.cos(rad));
-      txt.setAttribute('y', cy + 62 * Math.sin(rad) + 4);
-      txt.setAttribute('text-anchor', 'middle');
-      txt.setAttribute('font-size', '8.5');
-      txt.setAttribute('fill', '#4a3e28');
-      txt.setAttribute('font-family', "'Cormorant SC', serif");
+      const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+      txt.setAttribute('x', cx + 62*Math.cos(rad));
+      txt.setAttribute('y', cy + 62*Math.sin(rad) + 4);
+      txt.setAttribute('text-anchor','middle');
+      txt.setAttribute('font-size','8.5');
+      txt.setAttribute('fill','#4a3e28');
+      txt.setAttribute('font-family',"'Cormorant SC', serif");
       txt.textContent = ev;
       g.appendChild(txt);
     }
@@ -934,16 +902,13 @@ function updateNeedle() {
   document.getElementById('needle-group').style.transform = `rotate(${angle}deg)`;
   const modeStr = state.mode === 'live' ? 'Live' : state.mode === 'locked' ? 'Locked' : 'Manual';
   document.getElementById('needleLabel').textContent = `${modeStr} · ${fmtEv(ev)}`;
-
-  // Pulse only when live
   document.getElementById('needlePulse').style.opacity = state.mode === 'live' ? '' : '0';
-  // Color when locked
   const col = state.mode === 'locked' ? '#e8a030' : '#c8a96e';
   document.getElementById('needleLine').setAttribute('stroke', col);
   document.getElementById('needleTip').setAttribute('fill', col);
 }
 
-// ─── UI Renders ───────────────────────────────────────────────────────────────
+// ─── Renders ──────────────────────────────────────────────────────────────────
 function renderISO() {
   const row = document.getElementById('isoRow');
   row.innerHTML = '';
@@ -970,14 +935,14 @@ function renderAperture() {
 
 function renderShutterScale() {
   const cam = CAMERAS[state.variant];
-  const ev = activeEv();
+  const ev  = activeEv();
   const rec = closestSpeed(state.fStop, ev, state.iso, cam.speeds);
   const scale = document.getElementById('shutterScale');
   scale.innerHTML = '';
   cam.speeds.forEach(s => {
     const div = document.createElement('div');
     const isIdeal = s === rec;
-    const diff = stopsDiff(state.fStop, s, ev, state.iso);
+    const diff    = stopsDiff(state.fStop, s, ev, state.iso);
     const isClose = !isIdeal && diff <= 1;
     div.className = 'shutter-chip' + (isIdeal ? ' ideal' : isClose ? ' close' : '');
     div.textContent = fmtShutter(s);
@@ -998,12 +963,12 @@ function renderShutterScale() {
 
 function renderResult() {
   const cam = CAMERAS[state.variant];
-  const ev = activeEv();
+  const ev  = activeEv();
   const rec = closestSpeed(state.fStop, ev, state.iso, cam.speeds);
   document.getElementById('resultSpeed').textContent = fmtShutter(rec);
-  document.getElementById('metaFstop').textContent = fmtFStop(state.fStop);
-  document.getElementById('metaISO').textContent = `ISO ${state.iso}`;
-  document.getElementById('metaEV').textContent = fmtEv(ev);
+  document.getElementById('metaFstop').textContent   = fmtFStop(state.fStop);
+  document.getElementById('metaISO').textContent     = `ISO ${state.iso}`;
+  document.getElementById('metaEV').textContent      = fmtEv(ev);
 }
 
 function renderVariantBtns() {
@@ -1016,7 +981,6 @@ function renderMeterToggle() {
   document.getElementById('toggleSpot').className = 'meter-toggle-btn' + (state.meterMode === 'spot' ? ' active' : '');
   document.getElementById('modeBadge').textContent = state.meterMode === 'spot' ? 'SPOT' : 'AVG';
   document.getElementById('meteringModeLabel').textContent = state.meterMode === 'spot' ? 'Spot' : 'Average';
-  // Show/hide spot canvas
   const sc = document.getElementById('spotCanvas');
   sc.style.display = (state.mode !== 'manual' && state.meterMode === 'spot') ? 'block' : 'none';
   drawSpotCircle();
@@ -1032,11 +996,9 @@ function renderAll() {
   updateNeedle();
 }
 
-// ─── Variant & Mode Setters ───────────────────────────────────────────────────
-function setVariant(v) {
-  state.variant = v;
-  renderAll();
-}
+// ─── Setters ──────────────────────────────────────────────────────────────────
+function setVariant(v)   { state.variant = v; renderAll(); }
+function setMeterMode(m) { state.meterMode = m; renderMeterToggle(); renderAll(); }
 
 function setManualEv(v) {
   state.manualEv = parseFloat(v);
@@ -1044,13 +1006,20 @@ function setManualEv(v) {
   renderAll();
 }
 
-function setMeterMode(m) {
-  state.meterMode = m;
-  renderMeterToggle();
+function setCalibration(v) {
+  state.calOffset = parseFloat(v);
+  document.getElementById('calVal').textContent = `${parseFloat(v) >= 0 ? '+' : ''}${parseFloat(v).toFixed(1)} EV`;
   renderAll();
 }
 
-// ─── Spot Meter ───────────────────────────────────────────────────────────────
+function resetCalibration() {
+  state.calOffset = -3.5;
+  document.getElementById('calSlider').value = -3.5;
+  document.getElementById('calVal').textContent = '−3.5 EV';
+  renderAll();
+}
+
+// ─── Spot ─────────────────────────────────────────────────────────────────────
 const spotCanvas = document.getElementById('spotCanvas');
 
 spotCanvas.addEventListener('click', function(e) {
@@ -1061,91 +1030,66 @@ spotCanvas.addEventListener('click', function(e) {
 });
 
 function drawSpotCircle() {
-  const vf = document.getElementById('viewfinder');
   const w = spotCanvas.offsetWidth;
   const h = spotCanvas.offsetHeight;
   spotCanvas.width = w;
   spotCanvas.height = h;
   if (state.meterMode !== 'spot' || state.mode === 'manual') return;
-
   const ctx = spotCanvas.getContext('2d');
   ctx.clearRect(0, 0, w, h);
-
   const cx = state.spotX * w;
   const cy = state.spotY * h;
-  const r  = Math.min(w, h) * 0.05; // ~5% of frame
-
-  // Outer ring
+  const r  = Math.min(w, h) * 0.05;
   ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.arc(cx, cy, r, 0, Math.PI*2);
   ctx.strokeStyle = 'rgba(200,169,110,0.85)';
   ctx.lineWidth = 1.5;
   ctx.stroke();
-
-  // Inner dot
   ctx.beginPath();
-  ctx.arc(cx, cy, 2, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 2, 0, Math.PI*2);
   ctx.fillStyle = 'rgba(200,169,110,0.9)';
   ctx.fill();
-
-  // Cross hairs
   const arm = r * 0.55;
   ctx.strokeStyle = 'rgba(200,169,110,0.5)';
   ctx.lineWidth = 0.8;
-  [[cx - r - arm, cy, cx - r, cy],
-   [cx + r, cy, cx + r + arm, cy],
-   [cx, cy - r - arm, cx, cy - r],
-   [cx, cy + r, cx, cy + r + arm]].forEach(([x1,y1,x2,y2]) => {
+  [[cx-r-arm,cy,cx-r,cy],[cx+r,cy,cx+r+arm,cy],
+   [cx,cy-r-arm,cx,cy-r],[cx,cy+r,cx,cy+r+arm]].forEach(([x1,y1,x2,y2]) => {
     ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
   });
 }
 
-// ─── Camera Metering ─────────────────────────────────────────────────────────
-let stream = null;
-let rafId  = null;
+// ─── Camera ───────────────────────────────────────────────────────────────────
+let stream = null, rafId = null;
 
 function analyzeFrame() {
   const video  = document.getElementById('video');
   const canvas = document.getElementById('analyzeCanvas');
   if (!video || video.readyState < 2) { rafId = requestAnimationFrame(analyzeFrame); return; }
-
   const W = 80, H = 60;
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
   ctx.drawImage(video, 0, 0, W, H);
   const data = ctx.getImageData(0, 0, W, H).data;
-
   let total = 0, count = 0;
-
   if (state.meterMode === 'spot') {
-    // Sample only pixels within the spot circle (~5% radius)
-    const cx = state.spotX * W;
-    const cy = state.spotY * H;
-    const r  = Math.min(W, H) * 0.05;
-    for (let y = 0; y < H; y++) {
-      for (let x = 0; x < W; x++) {
-        if ((x-cx)**2 + (y-cy)**2 <= r*r) {
-          const i = (y * W + x) * 4;
-          total += 0.2126*data[i] + 0.7152*data[i+1] + 0.0722*data[i+2];
-          count++;
-        }
+    const cx = state.spotX * W, cy = state.spotY * H, r = Math.min(W,H) * 0.05;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      if ((x-cx)**2 + (y-cy)**2 <= r*r) {
+        const i = (y*W+x)*4;
+        total += 0.2126*data[i] + 0.7152*data[i+1] + 0.0722*data[i+2];
+        count++;
       }
     }
   } else {
-    // Full frame average
     for (let i = 0; i < data.length; i += 4) {
       total += 0.2126*data[i] + 0.7152*data[i+1] + 0.0722*data[i+2];
       count++;
     }
   }
-
-  const avg = count > 0 ? total / count : 0;
-  const ev  = Math.round(lumToEV(avg) * 2) / 2;
+  const ev = Math.round(lumToEV(count > 0 ? total/count : 0) * 2) / 2;
   state.liveEv = ev;
-
   document.getElementById('evBadge').textContent = `EV ${ev}`;
   renderAll();
-
   rafId = requestAnimationFrame(analyzeFrame);
 }
 
@@ -1159,20 +1103,18 @@ async function startCamera() {
     video.srcObject = stream;
     await video.play();
     video.style.display = 'block';
-
     document.getElementById('idleState').style.display = 'none';
     document.getElementById('liveOverlay').style.display = 'block';
     document.getElementById('meterToggle').style.display = 'flex';
     document.getElementById('manualEvSection').style.display = 'none';
     document.getElementById('viewfinder').className = 'viewfinder-wrap live';
-
-    setControls('live');
     state.mode = 'live';
+    setControls('live');
     drawSpotCircle();
     rafId = requestAnimationFrame(analyzeFrame);
   } catch(e) {
     document.getElementById('cameraError').textContent =
-      'Camera access denied. Open this file in Safari and allow camera access when prompted.';
+      'Camera access denied. Open in Safari and allow camera access when prompted.';
   }
 }
 
@@ -1181,11 +1123,9 @@ function lockReading() {
   state.lockedEv = state.liveEv;
   state.mode = 'locked';
   if (rafId) cancelAnimationFrame(rafId);
-
   document.getElementById('lockedOverlay').className = 'locked-overlay show';
   document.getElementById('lockedEvDisplay').textContent = `EV ${state.lockedEv}`;
   document.getElementById('viewfinder').className = 'viewfinder-wrap locked';
-  document.getElementById('evBadge').textContent = `EV ${state.lockedEv}`;
   setControls('locked');
   renderAll();
 }
@@ -1203,14 +1143,9 @@ function stopCamera() {
   if (rafId) cancelAnimationFrame(rafId);
   if (stream) stream.getTracks().forEach(t => t.stop());
   stream = null;
-  state.mode = 'manual';
-  state.liveEv = null;
-  state.lockedEv = null;
-
+  state.mode = 'manual'; state.liveEv = null; state.lockedEv = null;
   const video = document.getElementById('video');
-  video.style.display = 'none';
-  video.srcObject = null;
-
+  video.style.display = 'none'; video.srcObject = null;
   document.getElementById('idleState').style.display = 'block';
   document.getElementById('liveOverlay').style.display = 'none';
   document.getElementById('lockedOverlay').className = 'locked-overlay';
@@ -1229,11 +1164,11 @@ function setControls(mode) {
     c.innerHTML = `<button class="ctrl-btn primary" onclick="startCamera()">◉ &nbsp;Live Meter</button>`;
   } else if (mode === 'live') {
     c.innerHTML = `
-      <button class="ctrl-btn primary" onclick="lockReading()">⊙ &nbsp;Lock Reading</button>
+      <button class="ctrl-btn primary"   onclick="lockReading()">⊙ &nbsp;Lock Reading</button>
       <button class="ctrl-btn secondary" onclick="stopCamera()">✕ &nbsp;Stop</button>`;
-  } else if (mode === 'locked') {
+  } else {
     c.innerHTML = `
-      <button class="ctrl-btn primary" onclick="resumeLive()">◉ &nbsp;Resume Live</button>
+      <button class="ctrl-btn primary"   onclick="resumeLive()">◉ &nbsp;Resume Live</button>
       <button class="ctrl-btn secondary" onclick="stopCamera()">✕ &nbsp;Stop</button>`;
   }
 }
